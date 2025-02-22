@@ -15,7 +15,8 @@ pnpm dev
 # or
 bun dev
 ```
-4) NOW IT WILL BE WORKING ON YOUR ```bash
+4) NOW IT WILL BE WORKING ON YOUR
+```bash
   http://localhost:3000/
 ```
 
