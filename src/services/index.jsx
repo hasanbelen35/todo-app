@@ -39,13 +39,12 @@ export const deleteData = async (tableName, where) => {
         return { error: error.message };
     }
 };
-
 // UPDATE DATA FROM DB
 export const updateData = async (tableName, where, newData) => { 
     try {
         const data = await prisma[tableName].update({
             where: where,
-            data: newData,
+            data: newData, 
         });
         return data;
     } catch (error) {

@@ -18,9 +18,9 @@ const useTodoStore = create((set) => ({
   },
 
   // Add a new todo
-  addTodo: async (title,description) => {
+  addTodo: async (title, description) => {
     try {
-      const addedTodo = await postAPI("/api/postNewTodo", { title,description });
+      const addedTodo = await postAPI("/api/postNewTodo", { title, description });
       set((state) => ({ todos: [...state.todos, addedTodo.data] }));
     } catch (error) {
       console.error("Error adding todo:", error);
@@ -39,19 +39,21 @@ const useTodoStore = create((set) => ({
     }
   },
 
-  // Update a todo (Completed/Not Completed)
-  updateTodo: async (id, completed) => {
+  // Update a todo
+  updateTodo: async (id, title, description) => {
     try {
-      await updateAPI("/api/updateTodo", id, { completed: !completed });
+      await updateAPI("/api/updateTodo", id, title, description);
       set((state) => ({
         todos: state.todos.map((todo) =>
-          todo.id === id ? { ...todo, completed: !completed } : todo
+          todo.id === id ? { ...todo, title, description } : todo
         ),
       }));
     } catch (error) {
       console.error("Error updating todo:", error);
     }
   },
+
+  
 }));
 
 export default useTodoStore;

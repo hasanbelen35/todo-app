@@ -1,4 +1,6 @@
-import { updateData } from  '@/services/index';
+import { updateData } from '@/services/index';
+
+
 
 // UPDATE DATA FROM DB HANDLER
 export default async function handler(req, res) {
@@ -8,13 +10,13 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { id, newData } = req.body; 
+        const { id, title, description } = req.body; 
 
-        if (!id || !newData) {
-            return res.status(400).json({ error: "ID and newData are required!" });
+        if (!id || !title || !description) {
+            return res.status(400).json({ error: "ID, title, and description are required!" }); 
         }
 
-        const data = await updateData('Todo', { id }, newData);
+        const data = await updateData('Todo', { id }, { title, description });
 
         if (!data || data.error || data === undefined) {
             throw new Error(data.error);

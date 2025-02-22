@@ -6,25 +6,35 @@ const Todo = () => {
   const { todos, fetchTodos, addTodo, deleteTodo, updateTodo, loading } = useTodoStore();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [editingId, setEditingId] = useState(null);
 
+  // GET ALL TODOS FROM DB WHEN COMPONENT MOUNTS
   useEffect(() => {
     fetchTodos();
   }, []);
 
+  // SUBMIT HANDLER WHEN ADDING OR UPDATING A TODO
   const handleSubmit = async (e) => {
     e.preventDefault();
-    title.trim() && description.trim();
-    await addTodo(title, description);
+    if (editingId) {
+      await updateTodo(editingId, title, description);
+      setEditingId(null);
+    } else {
+      if (!title.trim() || !description.trim()) return;
+      await addTodo(title, description);
+    }
     setTitle("");
     setDescription("");
   };
-
+  // DELETE TODO FUNCTION HANDLER
   const deleteTodoHandler = async (id) => {
     await deleteTodo(id);
   };
 
-  const updateTodoHandler = async (id, completed) => {
-    await updateTodo(id, completed);
+  const editTodoHandler = (id, currentTitle, currentDescription) => {
+    setEditingId(id);
+    setTitle(currentTitle);
+    setDescription(currentDescription);
   };
 
   return (
@@ -32,7 +42,9 @@ const Todo = () => {
       <h1 className="text-3xl font-bold text-center text-gray-900 mb-8"> Todo List</h1>
 
       <form onSubmit={handleSubmit} className="bg-gray-50 p-6 rounded-xl shadow-md mb-6">
-        <h2 className="text-lg font-semibold text-gray-700 mb-3">Add a New Task</h2>
+        <h2 className="text-lg font-semibold text-gray-700 mb-3">
+          {editingId ? "Edit Task" : "Add a New Task"}
+        </h2>
         <div className="flex flex-col gap-3">
           <input
             type="text"
@@ -52,7 +64,7 @@ const Todo = () => {
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition duration-200"
           >
-            Add Task
+            {editingId ? "Update Task" : "Add Task"}
           </button>
         </div>
       </form>
@@ -82,15 +94,12 @@ const Todo = () => {
                     Delete
                   </button>
                   <button
-                    onClick={() => updateTodoHandler(todo.id, todo.completed)}
-                    className={`px-4 py-2 rounded-lg font-medium transition duration-200 ${
-                      todo.completed
-                        ? "bg-green-500 hover:bg-green-600 text-white"
-                        : "bg-yellow-500 hover:bg-yellow-600 text-white"
-                    }`}
+                    onClick={() => editTodoHandler(todo.id, todo.title, todo.description)}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-600 transition duration-200"
                   >
-                    {todo.completed ? "Not Completed" : "Completed"}
+                    Edit
                   </button>
+
                 </div>
               </li>
             ))
