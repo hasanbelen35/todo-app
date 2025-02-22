@@ -4,8 +4,12 @@ For Start
 npm install
 ```
 2) SET YOUR ENVİRONMENT VARİABLES A) DATABASE_URL B) NODE_ENV
+   
+SET YOUR PRISMA SCHEMA TO DB
+```bash
+    npx prisma generate
+   ```
 
-3)
 ```bash
 npm run dev
 # or
